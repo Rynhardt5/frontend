@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
 import { setFormErrors, removeFormErrors } from '../actions/alertActions';
+import { register } from '../actions/authActions';
 import FormErrors from '../components/FormErrors';
-import axios from 'axios';
 
 const mapStateToProps = (state) => {
   return { formErrors: state.alerts.formErrors };
@@ -13,7 +13,8 @@ const mapStateToProps = (state) => {
 export const Register = connect(mapStateToProps, {
   setFormErrors,
   removeFormErrors,
-})(function ({ setFormErrors, removeFormErrors, formErrors }) {
+  register,
+})(function ({ formErrors, register }) {
   return (
     <div className="registration">
       <Formik
@@ -30,9 +31,9 @@ export const Register = connect(mapStateToProps, {
 
           if (!values.password) {
             errors.password = 'Please enter a password you want to use';
-          } else if (values.password.length < 6) {
+          } else if (values.password.length < 5) {
             errors.password =
-              'Please enter a password with at least 6 characters';
+              'Please enter a password with at least 5 characters';
           }
 
           if (!values.name) {
@@ -44,20 +45,7 @@ export const Register = connect(mapStateToProps, {
         onSubmit={async (values, { setSubmitting }) => {
           // send to server
 
-          try {
-            const response = await axios.post(
-              'http://localhost:4000/user/register',
-              values
-            );
-
-            if (response.data.success) {
-              console.log(response.data);
-              setSubmitting(false);
-              removeFormErrors('login');
-            }
-          } catch (err) {
-            setFormErrors('registration', err.response.data.errors);
-          }
+          register(values, setSubmitting);
         }}
       >
         {({
@@ -77,7 +65,7 @@ export const Register = connect(mapStateToProps, {
                 Create your account
               </div>
             </div>
-            <FormErrors errors={formErrors} form="registration" />
+            <FormErrors errors={formErrors} form="register" />
             <div className="input__group">
               <input
                 placeholder="Your full name"

@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-//contain the layout
 import { Home, Register, Login, LocationNotFound } from './pages';
+import setAuthToken from './utils/setAuthToken';
+import { loadUser } from './actions/authActions';
 import Navbar from './layout/Navbar';
+import store from './store';
 
-export default function App() {
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
+
+const App = () => {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <Router>
       <Navbar />
@@ -16,4 +26,6 @@ export default function App() {
       </Switch>
     </Router>
   );
-}
+};
+
+export default App;

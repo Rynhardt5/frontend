@@ -2,18 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
-import { setFormErrors, removeFormErrors } from '../actions/alertActions';
+import { login } from '../actions/authActions';
 import FormErrors from '../components/FormErrors';
-import axios from 'axios';
 
 const mapStateToProps = (state) => {
   return { formErrors: state.alerts.formErrors };
 };
 
 export const Login = connect(mapStateToProps, {
-  setFormErrors,
-  removeFormErrors,
-})(function ({ setFormErrors, removeFormErrors, formErrors }) {
+  login,
+})(function ({ formErrors, login }) {
   return (
     <div className="registration">
       <Formik
@@ -36,21 +34,7 @@ export const Login = connect(mapStateToProps, {
         }}
         onSubmit={async (values, { setSubmitting }) => {
           // send to server
-
-          try {
-            const response = await axios.post(
-              'http://localhost:4000/user/login',
-              values
-            );
-
-            if (response.data.success) {
-              console.log(response.data);
-              setSubmitting(false);
-              removeFormErrors('login');
-            }
-          } catch (err) {
-            setFormErrors('login', err.response.data.errors);
-          }
+          login(values, setSubmitting);
         }}
       >
         {({

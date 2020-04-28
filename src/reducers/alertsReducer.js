@@ -2,7 +2,7 @@ import { SET_FORM_ERRORS, REMOVE_FORM_ERRORS } from '../actions/types';
 
 const initialState = {
   formErrors: {
-    registration: null,
+    register: null,
     login: null,
   },
   toastMessage: null,
