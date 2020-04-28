@@ -1,0 +1,11 @@
+.form-errors {
+  margin-bottom: 2rem;
+  &__list {
+  }
+
+  &__item {
+    list-style: none;
+    font-size: 1.4rem;
+    color: orange;
+  }
+}
